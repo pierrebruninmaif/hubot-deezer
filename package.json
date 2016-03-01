@@ -4,25 +4,21 @@
   "version": "0.0.0",
   "author": "Sungwon Lee <ssowonny@gmail.com>",
   "license": "MIT",
-
   "keywords": "hubot, hubot-scripts, deezer, hubot-deezer",
-
   "repository": {
     "type": "git",
     "url": "git://github.com/ssowonny/hubot-deezer.git"
   },
-
   "bugs": {
     "url": "https://github.com/ssowonny/hubot-deezer/issues"
   },
-
   "dependencies": {
+    "pusher": "^1.2.0",
+    "request": "^2.69.0"
   },
-
   "peerDependencies": {
     "hubot": "2.x"
   },
-
   "devDependencies": {
     "chai": "^2.1.1",
     "coffee-script": "1.6.3",
@@ -37,9 +33,7 @@
     "sinon": "^1.13.0",
     "sinon-chai": "^2.7.0"
   },
-
   "main": "index.coffee",
-
   "scripts": {
     "test": "grunt test"
   }

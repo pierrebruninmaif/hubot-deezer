@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title Hubot deezer player
+    style.
+      html, body { margin: 0; padding: 0; height: 100%; }
+      #player { width: 100%; height: 100%; }
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js")
+    script(src="https://cdns-files.dzcdn.net/js/min/dz.js")
+    script(src="https://js.pusher.com/3.0/pusher.min.js")
+  body
+    div#dz-root
+    div#player
+
+    script.
+      window.PUSHER_KEY = "#{pusher_key}"
+      window.DEEZER_APP_ID = "#{deezer_app_id}"
+    script(src="/hubot/deezer/app.js")
+
