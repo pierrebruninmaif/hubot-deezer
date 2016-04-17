@@ -2,7 +2,7 @@
 
 A simple shared music player controlled by hubot.
 
-See [`src/deezer.coffee`](src/deezer.coffee) for full documentation.
+See [`src/scripts/deezer.coffee`](src/scripts/deezer.coffee) for full documentation.
 
 ## Installation
 
@@ -17,6 +17,17 @@ Then add **hubot-deezer** to your `external-scripts.json`:
   "hubot-deezer"
 ]
 ```
+
+Setup environment variables.
+
+```
+PUSHER_APP_ID=<Pusher ID>
+PUSHER_KEY=<Your Pusher Key>
+PUSHER_SECRET=<Your Pusher Secret>
+DEEZER_APP_ID=<Your Deezer App ID>
+```
+
+Open <Your host>/hubot-deezer on your browser.
 
 ## Sample Interaction
 

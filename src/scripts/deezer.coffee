@@ -36,7 +36,7 @@ module.exports = (robot) ->
       *Play Control*
       deezer status - Display current player status.
       deezer play [INDEX] - Play music. Play a track at the INDEX if presented.
-      deezer pause - Pause music.
+      deezer (pause|stop) - Pause music.
       deezer next - Play next song.
       deezer prev - Play previous song.
       deezer seek 0-100 - Set the position of the reader head in the currently playing track.
@@ -46,24 +46,14 @@ module.exports = (robot) ->
 
       *Playlist Control*
       deezer add INDEX - Add the track in search result to the end of the playlist.
-      deezer add "QUERY" - Add the first song searched with QUERY string.
-      deezer insert INDEX - Insert the track in search result to the next of the current track.
-      deezer insert "QUERY" - Insert the first song searched with QUERY string to the next of the current track.
-      deezer list [COUNT|all] - Display songs in playlist.
+      deezer list - Display songs in playlist.
       """
 
-  robot.hear /^(hubot |)deezer (status|next|prev|play|pause|seek|volume|repeat|shuffle) *(.*)$/i, (res) ->
+  robot.hear /^(hubot |)deezer (status|next|prev|play|pause|stop|seek|volume|repeat|shuffle|list) *(.*)$/i, (res) ->
     pusher.trigger('hubot-deezer', 'control', {
       room: res.message.room
       action: res.match[2]
       value: res.match[3]
-    })
-
-  robot.hear /^(hubot |)deezer list *([0-9]+|all|)$/i, (res) ->
-    pusher.trigger('hubot-deezer', 'playlist', {
-      room: res.message.room
-      action: 'list'
-      size: res.match[2]
     })
 
   search = (query, callback) ->
@@ -112,13 +102,13 @@ module.exports = (robot) ->
         id: list[0].id
       })
 
-  robot.router.get '/hubot/deezer/app.js', (req, res) ->
+  robot.router.get '/hubot-deezer/app.js', (req, res) ->
     # TODO Load the file on loading
     fs.readFile path.resolve(__dirname, '../assets/app.js'), 'utf8', (err, data) =>
       throw err if err
       res.send data
 
-  robot.router.get '/hubot/deezer', (req, res) ->
+  robot.router.get '/hubot-deezer', (req, res) ->
     # TODO Compile template on loading
     template = null
     fs.readFile path.resolve(__dirname, '../templates/index.jade'), 'utf8', (err, data) =>
@@ -127,27 +117,27 @@ module.exports = (robot) ->
 
       res.send template(pusher_key: process.env.PUSHER_KEY, deezer_app_id: process.env.DEEZER_APP_ID)
 
-  robot.router.get '/hubot/deezer/channel', (req, res) ->
+  robot.router.get '/hubot-deezer/channel', (req, res) ->
     res.send '<script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>'
 
-  robot.router.post '/hubot/deezer/:room/status', (req, res) ->
+  robot.router.post '/hubot-deezer/:room/status', (req, res) ->
     room = req.params.room
     data = req.body
     repeat = ['no', 'all', 'one'][data.repeat]
-    robot.messageRoom room, "_playing(#{data.playing}) volume(#{data.volume}) shuffle(#{data.shuffle}) repeat(#{repeat})_"
+    robot.messageRoom room, "*#{data.track.title}* - _#{data.track.artist?.name}_\n_playing(#{data.playing}) volume(#{data.volume}) shuffle(#{data.shuffle}) repeat(#{repeat})_"
     res.send 'OK'
 
-  robot.router.post '/hubot/deezer/:room/track', (req, res) ->
+  robot.router.post '/hubot-deezer/:room/track', (req, res) ->
     track = req.body.track
-    message = "'#{track.title} - _#{track.artist?.name}_' is successfully added."
+    message = "'*#{track.title}* - _#{track.artist?.name}_' is successfully added."
     robot.messageRoom req.params.room, message
     res.send 'OK'
 
-  robot.router.post '/hubot/deezer/:room/message', (req, res) ->
+  robot.router.post '/hubot-deezer/:room/message', (req, res) ->
     robot.messageRoom req.params.room, req.body.message
     res.send 'OK'
 
-  robot.router.post '/hubot/deezer/:room/tracks', (req, res) ->
+  robot.router.post '/hubot-deezer/:room/tracks', (req, res) ->
     start = parseInt(req.body.start || 0)
     index = parseInt(req.body.index || 0)
     total_count = parseInt(req.body.total_count)
