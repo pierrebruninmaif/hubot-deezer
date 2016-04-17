@@ -29,8 +29,8 @@ const hubot = {
     })
   },
 
-  postTrack: function (room, track) {
-    $.post('/hubot-deezer/' + room + '/track', { track: track })
+  postTrack: function (room, track, message) {
+    $.post('/hubot-deezer/' + room + '/track', { track: track, message: message })
   },
 
   enqueueStatusQueue: function (room) {
@@ -127,13 +127,36 @@ function Request (room, type) {
   }
 
   this.add = function (id) {
-    DZ.player.addToQueue([id], function (tracks) {
+    id = id.toString()
+    console.log(id)
+    DZ.player.addToQueue([id], function (playlist) {
       var tracks = playlist.tracks.filter(function (track) { return track.id === id })
       var track = tracks && tracks.length > 0 ? tracks[0] : null
+      console.log(track)
       if (track) {
-        postTrack(track)
+        hubot.postTrack(this.room, track, 'is added.')
       }
-    })
+    }.bind(this))
+  }
+
+  this.remove = function (index) {
+    index = parseInt(index, 10)
+    var tracks = DZ.player.getTrackList()
+    var track = tracks[index]
+    if (!track) {
+      return
+    }
+
+    var currentIndex = DZ.player.getCurrentIndex()
+    if (index < currentIndex) {
+      --currentIndex
+    }
+
+    var trackIds = tracks.map(function (track) { return track.id })
+    trackIds.splice(index, 1)
+    DZ.player.playTracks(trackIds, currentIndex, function (tracks) {
+      hubot.postTrack(this.room, track, 'is removed.')
+    }.bind(this))
   }
 }
 

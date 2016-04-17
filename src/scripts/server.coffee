@@ -41,7 +41,7 @@ module.exports = (robot) ->
 
   robot.router.post '/hubot-deezer/:room/track', (req, res) ->
     track = req.body.track
-    message = "'*#{track.title}* - _#{track.artist?.name}_' is successfully added."
+    message = "*#{track.title}* - _#{track.artist?.name}_ #{req.body.message}"
     robot.messageRoom req.params.room, message
     res.send 'OK'
 
@@ -50,9 +50,9 @@ module.exports = (robot) ->
     res.send 'OK'
 
   robot.router.post '/hubot-deezer/:room/tracks', (req, res) ->
-    start = parseInt(req.body.start || 0)
-    index = parseInt(req.body.index || 0)
-    total_count = parseInt(req.body.total_count)
+    start = parseInt(req.body.start || 0, 10)
+    index = parseInt(req.body.index || 0, 10)
+    total_count = parseInt(req.body.total_count, 10)
     tracks = req.body.tracks
 
     list = req.body.tracks.map (track, i) ->

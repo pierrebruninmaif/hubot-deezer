@@ -46,7 +46,7 @@ module.exports = (robot) ->
       deezer list - Display songs in playlist.
       """
 
-  robot.hear /^(hubot |)deezer (status|next|prev|play|pause|stop|seek|volume|repeat|shuffle|list) *(.*)$/i, (res) ->
+  robot.hear /^(hubot |)deezer (status|next|prev|play|pause|stop|seek|volume|repeat|shuffle|list|remove) *(.*)$/i, (res) ->
     pusher.trigger('hubot-deezer', 'control', {
       room: res.message.room
       action: res.match[2]
@@ -78,12 +78,14 @@ module.exports = (robot) ->
       res.send "_Type `deezer add NUMBER` to add the song._\n>>>\n#{result.join('\n')}"
 
   robot.hear /^(hubot |)deezer add ([0-9]+)$/i, (res) ->
-    index = parseInt res.match[3]
+    index = parseInt(res.match[2], 10)
+    console.log index
+    console.log _searchResult
     if _searchResult && index >= 0 && index < _searchResult.length
       pusher.trigger('hubot-deezer', 'control', {
         room: res.message.room
-        action: res.match[2]
-        id: _searchResult[index].id
+        action: 'add'
+        value: _searchResult[index].id
       })
     else
       res.send "Select a number among the search result. (Try `deezer search QUERY`.)"
