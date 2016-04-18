@@ -1,10 +1,10 @@
 {
   "name": "hubot-deezer",
   "description": "A simple shared music player controlled by hubot.",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Sungwon Lee <ssowonny@gmail.com>",
   "license": "MIT",
-  "keywords": "hubot, hubot-scripts, deezer, hubot-deezer",
+  "keywords": "hubot, hubot-scripts, deezer, hubot-deezer, music, player",
   "repository": {
     "type": "git",
     "url": "git://github.com/ssowonny/hubot-deezer.git"

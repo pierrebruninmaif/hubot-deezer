@@ -161,13 +161,6 @@ function Request (room, type) {
 }
 
 $(function () {
-  // Enable pusher logging - don't include this in production
-  Pusher.log = function (message) {
-    if (window.console && window.console.log) {
-      window.console.log(message)
-    }
-  }
-
   var pusher = new Pusher(PUSHER_KEY, { encrypted: true })
   var channel = pusher.subscribe('hubot-deezer')
   channel.bind('control', function (data) {

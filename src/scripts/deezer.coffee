@@ -1,5 +1,7 @@
 # Description:
-#   A simple shared music player controlled by hubot.
+#   A simple shared music player controlled by hubot. Let everyone in your
+#   team add / remove / play / skip songs. They can also control volume,
+#   repeat and shuffle status of your player.
 #
 # Configuration:
 #   PUSHER_APP_ID
@@ -28,11 +30,13 @@ module.exports = (robot) ->
   robot.hear /^(hubot |)deezer help$/i, (res) ->
     res.send """
       deezer help - Show help.
+
+      *Search Tracks*
       deezer search QUERY - Search songs with QUERY.
       deezer search artist:"ARTIST" - Search songs with artist name.
       deezer search track:"TITLE" - Search songs with song title.
 
-      *Play Control*
+      *Player Control*
       deezer status - Display current player status.
       deezer play [INDEX] - Play music. Play a track at the INDEX if presented.
       deezer (pause|stop) - Pause music.
